@@ -4,112 +4,172 @@
 <title>PARVTRACKING</title>
 <style>
 *{box-sizing:border-box;margin:0;font-family:system-ui,sans-serif}
-body{background:#12091f;color:#f1e9ff;padding:14px;max-width:480px;margin:auto}
-h1{text-align:center;color:#b583ff;margin:10px 0 14px;font-size:24px}
-.card{background:#1e1233;border-radius:14px;padding:14px;margin-bottom:12px}
-h2{font-size:16px;margin-bottom:8px;color:#d4b8ff}
-input,select,button{width:100%;padding:11px;margin:4px 0;border-radius:10px;border:0;font-size:15px}
-input,select{background:#2c1d4a;color:#fff}
-button{background:#8b4dff;color:#fff;font-weight:600}
-.big{font-size:30px;font-weight:700;color:#b583ff;text-align:center}
-.sm{font-size:13px;opacity:.8;text-align:center}
-.bar{height:8px;background:#2c1d4a;border-radius:6px;overflow:hidden;margin:6px 0}
-.bar div{height:100%;background:#8b4dff}
-.row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #2c1d4a}
-.row input{width:auto;margin:0}.row span{flex:1}.row .x{width:auto;background:none;padding:2px 8px;color:#ff7b7b}
+body{background:#f5faff;color:#17324d;padding:14px;max-width:480px;margin:auto}
+h1{text-align:center;color:#2b8ad6;font:700 24px Georgia,serif;letter-spacing:1px;margin-bottom:4px}
+.sub{text-align:center;font-size:13px;color:#5d7b96;margin-bottom:14px}
+.card{background:#fff;border:1px solid #d6e9fa;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 6px rgba(43,138,214,.07)}
+h2{font:700 16px Georgia,serif;color:#2b8ad6;margin-bottom:10px}
+label{font-size:13px;color:#5d7b96;display:block;margin-top:8px}
+input,select,button{width:100%;padding:12px;margin:4px 0;border-radius:12px;font-size:15px;border:1px solid #cfe4f7;background:#f5faff;color:#17324d}
+button{background:#3a9ee8;color:#fff;border:0;font-weight:600}
+button.stop{background:#e8605a}
+.lg{width:84px;height:84px;border-radius:50%;border:3px solid #3a9ee8;margin:6px auto 10px;overflow:hidden;display:flex;align-items:center;justify-content:center;font:700 38px Georgia,serif;color:#3a9ee8;background:#fff}
+.lg img{width:100%;height:100%;object-fit:cover}
+.big{font-size:32px;font-weight:700;color:#2b8ad6;text-align:center}
+.sm{font-size:13px;color:#5d7b96;text-align:center}
+.cd{display:flex;gap:8px;margin:8px 0}
+.cd div{flex:1;background:#eaf5fe;border-radius:12px;padding:10px 0;text-align:center;font-size:24px;font-weight:700;color:#1f86d6}
+.cd small{display:block;font-size:11px;font-weight:400;color:#5d7b96}
+.bar{height:9px;background:#e1effb;border-radius:6px;overflow:hidden;margin:8px 0}
+.bar div{height:100%;background:#3a9ee8;width:0}
+.row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #e8f2fb}
+.row input{width:auto;margin:0}.row span{flex:1}
+.row .x{width:auto;background:none;padding:2px 8px;color:#e8605a}
 .done{text-decoration:line-through;opacity:.5}
-#lock{text-align:center;margin-top:30vh}
+.ex{display:flex;justify-content:space-between;font-size:14px;padding:5px 0}
+#lock{text-align:center;margin-top:18vh}
 </style></head><body>
 
 <div id="lock">
-<h1>PARVTRACKING</h1>
+<div class="lg"></div><h1>PARVTRACKING</h1>
 <input id="pw" type="password" placeholder="Password daalo">
 <button onclick="login()">Enter</button>
-<p id="err" class="sm" style="color:#ff7b7b"></p>
+<p id="err" class="sm" style="color:#e8605a"></p>
 </div>
 
+<div id="setup" hidden>
+<div class="lg"></div><h1>Shuru karte hain</h1>
+<div class="sub">Apni details bharo</div>
+<div class="card">
+<label>Tumhara naam</label><input id="nm" placeholder="Naam likho">
+<label>Kaunsa exam hai?</label>
+<select id="et"><option>Quarterly</option><option>Half Yearly</option><option>Annual</option></select>
+<label>SST exam date</label><input type="date" id="d0">
+<label>Math exam date</label><input type="date" id="d1">
+<label>Science exam date</label><input type="date" id="d2">
+<button onclick="saveP()">Save & Start 🚀</button>
+<p id="se" class="sm" style="color:#e8605a"></p>
+</div></div>
+
 <div id="app" hidden>
-<h1>📚 PARVTRACKING</h1>
+<div class="lg"></div><h1>PARVTRACKING</h1>
+<div class="sub" id="hi"></div>
 
-<div class="card"><h2>⏳ Board Exam Countdown</h2>
-<div class="big" id="cd"></div><div class="sm">din bache hain</div>
-<input type="date" id="ex" onchange="D.e=this.value;save();draw()"></div>
+<div class="card"><h2>⏳ Next Exam: <span id="nx"></span></h2>
+<div class="cd"><div><span id="cd_d">0</span><small>Din</small></div><div><span id="cd_h">0</span><small>Ghante</small></div><div><span id="cd_m">0</span><small>Minute</small></div><div><span id="cd_s">0</span><small>Second</small></div></div>
+<div id="exl"></div></div>
 
-<div class="card"><h2>🔥 Aaj ka Goal & Streak</h2>
-<div class="big" id="st"></div><div class="sm">din ki streak</div>
+<div class="card"><h2>🔥 Streak & Daily Goal</h2>
+<div class="big" id="st">0</div><div class="sm">din ki streak (roz kam se kam 30 min)</div>
 <div class="bar"><div id="gb"></div></div>
-<div class="sm" id="gt"></div>
-<input type="number" id="gi" step="0.5" min="0" placeholder="Daily goal (ghante)" onchange="D.g=+this.value||1;save();draw()"></div>
+<div class="sm" id="gt"></div><div class="sm" id="sh"></div></div>
 
-<div class="card"><h2>⏱️ Aaj ki Padhai Add karo</h2>
+<div class="card"><h2>⏱️ Study Stopwatch</h2>
 <select id="hs"></select>
-<input type="number" id="hv" step="0.25" min="0" placeholder="Kitne ghante?">
-<button onclick="addH()">Add</button>
-<div id="hl" class="sm" style="margin-top:8px"></div></div>
+<div class="big" id="sw">00:00:00</div>
+<button id="sb" onclick="toggle()">▶ Padhai Shuru</button>
+<div class="sm" id="hl" style="margin-top:8px"></div></div>
 
 <div class="card"><h2>✅ Chapter Checklist</h2>
-<select id="cs" onchange="draw()"></select>
-<input id="cn" placeholder="Naya chapter ka naam">
+<select id="chs" onchange="draw()"></select>
+<input id="chn" placeholder="Naya chapter ka naam">
 <button onclick="addC()">Chapter Add karo</button>
 <div class="sm" id="cp" style="margin-top:8px"></div>
 <div class="bar"><div id="cb"></div></div>
-<div id="cl"></div></div>
+<div id="chl"></div></div>
+
+<button onclick="editP()" style="background:#fff;color:#2b8ad6;border:1px solid #3a9ee8">⚙️ Naam / Exam dates badlo</button>
 </div>
 
 <script>
-const PW="PARVJI",S=["Hindi","English","Maths","Science","Social Science","Sanskrit"];
-let D={};try{D=JSON.parse(localStorage.getItem("pt"))||{}}catch(e){}
-D.h=D.h||{};D.c=D.c||{};D.g=D.g||3;D.e=D.e||"2027-03-01";
+const PW="PARVJI",LOGO_URL="",GOAL=10800,MIN=1800;
+const S=["Hindi","English","Maths","Science","Social Science","Sanskrit"],EX=["SST","Math","Science"];
+let D={};try{D=JSON.parse(localStorage.getItem("pt2"))||{}}catch(e){}
+D.h=D.h||{};D.c=D.c||{};
 const $=id=>document.getElementById(id);
-const save=()=>localStorage.setItem("pt",JSON.stringify(D));
+const save=()=>localStorage.setItem("pt2",JSON.stringify(D));
 const key=t=>new Date(t-t.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const tod=()=>key(new Date());
-const tot=k=>Object.values(D.h[k]||{}).reduce((a,b)=>a+b,0);
+const p2=n=>String(n).padStart(2,"0");
+const fmt=s=>p2(Math.floor(s/3600))+":"+p2(Math.floor(s%3600/60))+":"+p2(s%60);
+const hm=s=>Math.floor(s/3600)+"h "+Math.floor(s%3600/60)+"m";
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const run=()=>D.sw?Math.floor((Date.now()-D.sw.t)/1000):0;
+const tt=k=>Object.values(D.h[k]||{}).reduce((a,b)=>a+b,0)+(k===tod()?run():0);
+const show=id=>["lock","setup","app"].forEach(x=>$(x).hidden=x!==id);
+
+document.querySelectorAll(".lg").forEach(e=>e.innerHTML=LOGO_URL?`<img src="${LOGO_URL}" alt="logo">`:"P");
 
 function login(){
- if($("pw").value===PW){sessionStorage.ok=1;start()}
- else $("err").textContent="Galat password ❌";
+ if($("pw").value===PW){sessionStorage.ok=1;go()}else $("err").textContent="Galat password ❌";
 }
-function start(){
- $("lock").hidden=true;$("app").hidden=false;
- $("hs").innerHTML=$("cs").innerHTML=S.map(s=>`<option>${s}</option>`).join("");
- draw();
+function go(){D.p?startApp():editP()}
+function editP(){
+ const p=D.p||{d:["","",""],n:"",e:"Annual"};
+ $("nm").value=p.n;$("et").value=p.e;[0,1,2].forEach(i=>$("d"+i).value=p.d[i]);show("setup");
 }
-function addH(){
- const v=+$("hv").value,s=$("hs").value;if(!v||v<=0)return;
- const k=tod();D.h[k]=D.h[k]||{};D.h[k][s]=(D.h[k][s]||0)+v;
- $("hv").value="";save();draw();
+function saveP(){
+ const n=$("nm").value.trim(),d=[0,1,2].map(i=>$("d"+i).value);
+ if(!n||d.some(x=>!x)){$("se").textContent="Naam aur teeno dates bharo";return}
+ D.p={n:n,e:$("et").value,d:d};save();startApp();
+}
+function startApp(){
+ show("app");
+ $("hs").innerHTML=$("chs").innerHTML=S.map(s=>`<option>${s}</option>`).join("");
+ if(D.sw)$("hs").value=D.sw.s;
+ draw();tick();
+}
+function toggle(){
+ if(D.sw){
+  const e=run(),k=tod();D.h[k]=D.h[k]||{};D.h[k][D.sw.s]=(D.h[k][D.sw.s]||0)+e;D.sw=null;
+ }else D.sw={s:$("hs").value,t:Date.now()};
+ save();draw();tick();
 }
 function addC(){
- const n=$("cn").value.trim(),s=$("cs").value;if(!n)return;
- (D.c[s]=D.c[s]||[]).push({n:n,d:false});$("cn").value="";save();draw();
+ const n=$("chn").value.trim(),s=$("chs").value;if(!n)return;
+ (D.c[s]=D.c[s]||[]).push({n:n,d:false});$("chn").value="";save();draw();
 }
-function tg(i){const l=D.c[$("cs").value];l[i].d=!l[i].d;save();draw()}
-function rm(i){D.c[$("cs").value].splice(i,1);save();draw()}
+function tg(i){const l=D.c[$("chs").value];l[i].d=!l[i].d;save();draw()}
+function rm(i){D.c[$("chs").value].splice(i,1);save();draw()}
 
 function draw(){
- // countdown
- $("ex").value=D.e;
- $("cd").textContent=Math.max(0,Math.ceil((new Date(D.e)-new Date())/864e5));
- // goal + streak
- $("gi").value=D.g;
- const t=tot(tod());
- $("gt").textContent=`Aaj: ${t} / ${D.g} ghante`;
- $("gb").style.width=Math.min(100,t/D.g*100)+"%";
- let n=0,d=new Date();
- if(tot(key(d))<D.g)d.setDate(d.getDate()-1);
- while(tot(key(d))>=D.g){n++;d.setDate(d.getDate()-1)}
- $("st").textContent=n;
- // today list
+ $("hi").textContent=`Namaste, ${D.p.n} 👋 • ${D.p.e} Exam`;
+ const now=Date.now();
+ $("exl").innerHTML=D.p.d.map((d,i)=>{
+  const dl=Math.ceil((new Date(d+"T00:00:00")-now)/864e5);
+  return `<div class="ex"><b>${EX[i]}</b><span>${d.split("-").reverse().join("/")} • ${dl>0?dl+" din":"ho gaya"}</span></div>`;
+ }).join("");
+ $("sb").textContent=D.sw?"⏹ Stop & Save":"▶ Padhai Shuru";
+ $("sb").className=D.sw?"stop":"";
+ $("hs").disabled=!!D.sw;
  const h=D.h[tod()]||{};
- $("hl").innerHTML=Object.keys(h).map(s=>`${s}: ${h[s]}h`).join(" • ")||"Aaj abhi kuch add nahi hua";
- // chapters
- const l=D.c[$("cs").value]||[],dn=l.filter(x=>x.d).length;
+ $("hl").textContent=Object.keys(h).map(s=>`${s}: ${hm(h[s])}`).join(" • ")||"Aaj abhi koi padhai save nahi hui";
+ const l=D.c[$("chs").value]||[],dn=l.filter(x=>x.d).length;
  $("cp").textContent=`${dn} / ${l.length} chapter complete`;
  $("cb").style.width=(l.length?dn/l.length*100:0)+"%";
- $("cl").innerHTML=l.map((c,i)=>`<div class="row"><input type="checkbox" ${c.d?"checked":""} onchange="tg(${i})"><span class="${c.d?"done":""}">${esc(c.n)}</span><button class="x" onclick="rm(${i})">✕</button></div>`).join("");
+ $("chl").innerHTML=l.map((c,i)=>`<div class="row"><input type="checkbox" ${c.d?"checked":""} onchange="tg(${i})"><span class="${c.d?"done":""}">${esc(c.n)}</span><button class="x" onclick="rm(${i})">✕</button></div>`).join("");
 }
-if(sessionStorage.ok)start();
+
+function tick(){
+ if($("app").hidden)return;
+ const now=Date.now();
+ const nx=D.p.d.map((d,i)=>({n:EX[i],t:new Date(d+"T00:00:00")})).filter(e=>e.t>now).sort((a,b)=>a.t-b.t)[0];
+ if(nx){
+  const r=Math.floor((nx.t-now)/1000);
+  $("nx").textContent=nx.n;
+  [Math.floor(r/86400),Math.floor(r%86400/3600),Math.floor(r%3600/60),r%60].forEach((v,i)=>$("cd_"+"dhms"[i]).textContent=p2(v));
+ }else{$("nx").textContent="Sab exam ho gaye 🎉";["d","h","m","s"].forEach(x=>$("cd_"+x).textContent="00")}
+ const t=tt(tod());
+ $("gb").style.width=Math.min(100,t/GOAL*100)+"%";
+ $("gt").textContent=`Aaj: ${hm(t)} / 3h goal`;
+ $("sh").textContent=t>=MIN?"✅ Aaj ki streak pakki!":`Streak ke liye ${Math.ceil((MIN-t)/60)} min aur padho`;
+ let n=0,d=new Date();
+ if(tt(key(d))<MIN)d.setDate(d.getDate()-1);
+ while(tt(key(d))>=MIN){n++;d.setDate(d.getDate()-1)}
+ $("st").textContent=n;
+ $("sw").textContent=fmt(run());
+}
+setInterval(tick,1000);
+if(sessionStorage.ok)go();
 </script>
 </body></html>
