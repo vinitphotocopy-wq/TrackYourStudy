@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="hi"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>PARVTRACKING</title>
+<style>
+*{box-sizing:border-box;margin:0;font-family:system-ui,sans-serif}
+body{background:#12091f;color:#f1e9ff;padding:14px;max-width:480px;margin:auto}
+h1{text-align:center;color:#b583ff;margin:10px 0 14px;font-size:24px}
+.card{background:#1e1233;border-radius:14px;padding:14px;margin-bottom:12px}
+h2{font-size:16px;margin-bottom:8px;color:#d4b8ff}
+input,select,button{width:100%;padding:11px;margin:4px 0;border-radius:10px;border:0;font-size:15px}
+input,select{background:#2c1d4a;color:#fff}
+button{background:#8b4dff;color:#fff;font-weight:600}
+.big{font-size:30px;font-weight:700;color:#b583ff;text-align:center}
+.sm{font-size:13px;opacity:.8;text-align:center}
+.bar{height:8px;background:#2c1d4a;border-radius:6px;overflow:hidden;margin:6px 0}
+.bar div{height:100%;background:#8b4dff}
+.row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #2c1d4a}
+.row input{width:auto;margin:0}.row span{flex:1}.row .x{width:auto;background:none;padding:2px 8px;color:#ff7b7b}
+.done{text-decoration:line-through;opacity:.5}
+#lock{text-align:center;margin-top:30vh}
+</style></head><body>
+
+<div id="lock">
+<h1>PARVTRACKING</h1>
+<input id="pw" type="password" placeholder="Password daalo">
+<button onclick="login()">Enter</button>
+<p id="err" class="sm" style="color:#ff7b7b"></p>
+</div>
+
+<div id="app" hidden>
+<h1>📚 PARVTRACKING</h1>
+
+<div class="card"><h2>⏳ Board Exam Countdown</h2>
+<div class="big" id="cd"></div><div class="sm">din bache hain</div>
+<input type="date" id="ex" onchange="D.e=this.value;save();draw()"></div>
+
+<div class="card"><h2>🔥 Aaj ka Goal & Streak</h2>
+<div class="big" id="st"></div><div class="sm">din ki streak</div>
+<div class="bar"><div id="gb"></div></div>
+<div class="sm" id="gt"></div>
+<input type="number" id="gi" step="0.5" min="0" placeholder="Daily goal (ghante)" onchange="D.g=+this.value||1;save();draw()"></div>
+
+<div class="card"><h2>⏱️ Aaj ki Padhai Add karo</h2>
+<select id="hs"></select>
+<input type="number" id="hv" step="0.25" min="0" placeholder="Kitne ghante?">
+<button onclick="addH()">Add</button>
+<div id="hl" class="sm" style="margin-top:8px"></div></div>
+
+<div class="card"><h2>✅ Chapter Checklist</h2>
+<select id="cs" onchange="draw()"></select>
+<input id="cn" placeholder="Naya chapter ka naam">
+<button onclick="addC()">Chapter Add karo</button>
+<div class="sm" id="cp" style="margin-top:8px"></div>
+<div class="bar"><div id="cb"></div></div>
+<div id="cl"></div></div>
+</div>
+
+<script>
+const PW="PARVJI",S=["Hindi","English","Maths","Science","Social Science","Sanskrit"];
+let D={};try{D=JSON.parse(localStorage.getItem("pt"))||{}}catch(e){}
+D.h=D.h||{};D.c=D.c||{};D.g=D.g||3;D.e=D.e||"2027-03-01";
+const $=id=>document.getElementById(id);
+const save=()=>localStorage.setItem("pt",JSON.stringify(D));
+const key=t=>new Date(t-t.getTimezoneOffset()*6e4).toISOString().slice(0,10);
+const tod=()=>key(new Date());
+const tot=k=>Object.values(D.h[k]||{}).reduce((a,b)=>a+b,0);
+const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+function login(){
+ if($("pw").value===PW){sessionStorage.ok=1;start()}
+ else $("err").textContent="Galat password ❌";
+}
+function start(){
+ $("lock").hidden=true;$("app").hidden=false;
+ $("hs").innerHTML=$("cs").innerHTML=S.map(s=>`<option>${s}</option>`).join("");
+ draw();
+}
+function addH(){
+ const v=+$("hv").value,s=$("hs").value;if(!v||v<=0)return;
+ const k=tod();D.h[k]=D.h[k]||{};D.h[k][s]=(D.h[k][s]||0)+v;
+ $("hv").value="";save();draw();
+}
+function addC(){
+ const n=$("cn").value.trim(),s=$("cs").value;if(!n)return;
+ (D.c[s]=D.c[s]||[]).push({n:n,d:false});$("cn").value="";save();draw();
+}
+function tg(i){const l=D.c[$("cs").value];l[i].d=!l[i].d;save();draw()}
+function rm(i){D.c[$("cs").value].splice(i,1);save();draw()}
+
+function draw(){
+ // countdown
+ $("ex").value=D.e;
+ $("cd").textContent=Math.max(0,Math.ceil((new Date(D.e)-new Date())/864e5));
+ // goal + streak
+ $("gi").value=D.g;
+ const t=tot(tod());
+ $("gt").textContent=`Aaj: ${t} / ${D.g} ghante`;
+ $("gb").style.width=Math.min(100,t/D.g*100)+"%";
+ let n=0,d=new Date();
+ if(tot(key(d))<D.g)d.setDate(d.getDate()-1);
+ while(tot(key(d))>=D.g){n++;d.setDate(d.getDate()-1)}
+ $("st").textContent=n;
+ // today list
+ const h=D.h[tod()]||{};
+ $("hl").innerHTML=Object.keys(h).map(s=>`${s}: ${h[s]}h`).join(" • ")||"Aaj abhi kuch add nahi hua";
+ // chapters
+ const l=D.c[$("cs").value]||[],dn=l.filter(x=>x.d).length;
+ $("cp").textContent=`${dn} / ${l.length} chapter complete`;
+ $("cb").style.width=(l.length?dn/l.length*100:0)+"%";
+ $("cl").innerHTML=l.map((c,i)=>`<div class="row"><input type="checkbox" ${c.d?"checked":""} onchange="tg(${i})"><span class="${c.d?"done":""}">${esc(c.n)}</span><button class="x" onclick="rm(${i})">✕</button></div>`).join("");
+}
+if(sessionStorage.ok)start();
+</script>
+</body></html>
