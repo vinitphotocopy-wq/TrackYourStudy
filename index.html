@@ -1,123 +1,173 @@
 <!DOCTYPE html>
-<html lang="hi"><head><meta charset="utf-8">
+<html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>PARVTRACKING</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box;margin:0;font-family:system-ui,sans-serif}
-body{background:#f5faff;color:#17324d;padding:14px;max-width:480px;margin:auto}
-h1{text-align:center;color:#2b8ad6;font:700 24px Georgia,serif;letter-spacing:1px;margin-bottom:4px}
-.sub{text-align:center;font-size:13px;color:#5d7b96;margin-bottom:14px}
-.card{background:#fff;border:1px solid #d6e9fa;border-radius:16px;padding:16px;margin-bottom:12px;box-shadow:0 2px 6px rgba(43,138,214,.07)}
-h2{font:700 16px Georgia,serif;color:#2b8ad6;margin-bottom:10px}
-label{font-size:13px;color:#5d7b96;display:block;margin-top:8px}
-input,select,button{width:100%;padding:12px;margin:4px 0;border-radius:12px;font-size:15px;border:1px solid #cfe4f7;background:#f5faff;color:#17324d}
-button{background:#3a9ee8;color:#fff;border:0;font-weight:600}
+*{box-sizing:border-box;margin:0;font-family:'Poppins',system-ui,sans-serif}
+body{background:#f4f9ff;color:#14304a;padding:18px 16px 30px;max-width:480px;margin:auto;min-height:100vh}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif}
+h1{text-align:center;color:#1f86d6;font-size:26px;letter-spacing:1.5px}
+h3{text-align:center;font-size:23px;color:#14304a;margin:4px 0 6px}
+h2{font-size:17px;color:#1f86d6;margin-bottom:12px}
+.sub{text-align:center;font-size:13px;color:#5d7b96;margin:4px 0 16px}
+.card{background:#fff;border:1px solid #d9eafa;border-radius:20px;padding:18px;margin-bottom:14px;box-shadow:0 4px 14px rgba(31,134,214,.08)}
+label{font-size:12px;font-weight:500;color:#5d7b96;display:block;margin:10px 0 2px;letter-spacing:.4px;text-transform:uppercase}
+input,select,button{width:100%;padding:13px 14px;margin:5px 0;border-radius:14px;font-size:15px;border:1px solid #cfe4f7;background:#f4f9ff;color:#14304a;outline:0;transition:.2s}
+input:focus,select:focus{border-color:#3a9ee8;box-shadow:0 0 0 3px rgba(58,158,232,.18)}
+button{background:#3a9ee8;color:#fff;border:0;font-weight:600;cursor:pointer;letter-spacing:.3px}
+button:active{transform:scale(.97)}
 button.stop{background:#e8605a}
-.lg{width:84px;height:84px;border-radius:50%;border:3px solid #3a9ee8;margin:6px auto 10px;overflow:hidden;display:flex;align-items:center;justify-content:center;font:700 38px Georgia,serif;color:#3a9ee8;background:#fff}
+button.ghost{background:#fff;color:#1f86d6;border:1px solid #3a9ee8}
+button.opt{background:#fff;color:#14304a;border:1px solid #cfe4f7;text-align:left;font-weight:500;padding:16px}
+button.opt.on,button.opt:active{border-color:#3a9ee8;background:#eaf5fe;color:#1f86d6}
+.lg{width:84px;height:84px;border-radius:50%;border:3px solid #3a9ee8;margin:0 auto 12px;overflow:hidden;display:flex;align-items:center;justify-content:center;font:700 38px 'Playfair Display',serif;color:#3a9ee8;background:#fff;box-shadow:0 6px 16px rgba(58,158,232,.25);animation:float 3.5s ease-in-out infinite}
 .lg img{width:100%;height:100%;object-fit:cover}
-.big{font-size:32px;font-weight:700;color:#2b8ad6;text-align:center}
-.sm{font-size:13px;color:#5d7b96;text-align:center}
-.cd{display:flex;gap:8px;margin:8px 0}
-.cd div{flex:1;background:#eaf5fe;border-radius:12px;padding:10px 0;text-align:center;font-size:24px;font-weight:700;color:#1f86d6}
-.cd small{display:block;font-size:11px;font-weight:400;color:#5d7b96}
-.bar{height:9px;background:#e1effb;border-radius:6px;overflow:hidden;margin:8px 0}
-.bar div{height:100%;background:#3a9ee8;width:0}
-.row{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid #e8f2fb}
-.row input{width:auto;margin:0}.row span{flex:1}
-.row .x{width:auto;background:none;padding:2px 8px;color:#e8605a}
+.big{font-size:34px;font-weight:600;color:#1f86d6;text-align:center;font-variant-numeric:tabular-nums}
+.sm{font-size:13px;color:#5d7b96;text-align:center;margin-top:2px}
+.cd{display:flex;gap:8px;margin:6px 0 12px}
+.cd div{flex:1;background:#eaf5fe;border-radius:14px;padding:12px 0 8px;text-align:center;font-size:25px;font-weight:600;color:#1f86d6;font-variant-numeric:tabular-nums}
+.cd small{display:block;font:400 11px 'Poppins';color:#5d7b96;margin-top:2px}
+.bar{height:10px;background:#e1effb;border-radius:8px;overflow:hidden;margin:10px 0 6px}
+.bar div{height:100%;background:#3a9ee8;border-radius:8px;width:0;transition:width .8s ease}
+.row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid #e8f2fb;animation:up .35s both}
+.row input{width:20px;height:20px;margin:0;padding:0;accent-color:#3a9ee8}
+.row span{flex:1;font-size:14px}
+.row .x{width:auto;background:none;padding:2px 8px;color:#e8605a;margin:0}
 .done{text-decoration:line-through;opacity:.5}
-.ex{display:flex;justify-content:space-between;font-size:14px;padding:5px 0}
-#lock{text-align:center;margin-top:18vh}
+.ex{display:flex;justify-content:space-between;font-size:14px;padding:7px 0;border-top:1px solid #e8f2fb}
+.dots{display:flex;gap:7px;justify-content:center;margin-bottom:14px}
+.dots i{width:8px;height:8px;border-radius:5px;background:#cfe4f7;transition:.3s}
+.dots i.on{width:24px;background:#3a9ee8}
+.scr{padding-top:7vh}
+.scr:not([hidden]),#app:not([hidden])>*{animation:up .6s ease both}
+.err{color:#e8605a;font-size:13px;text-align:center;min-height:18px;margin-top:4px}
+.shake{animation:shake .4s}
+.pop{animation:pop .35s}
+.run .big{animation:glow 1.6s ease-in-out infinite}
+@keyframes up{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes float{50%{transform:translateY(-5px)}}
+@keyframes shake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+@keyframes pop{50%{transform:scale(1.15)}}
+@keyframes glow{50%{text-shadow:0 0 14px rgba(58,158,232,.55)}}
 </style></head><body>
 
-<div id="lock">
+<div id="lock" class="scr">
 <div class="lg"></div><h1>PARVTRACKING</h1>
-<input id="pw" type="password" placeholder="Password daalo">
-<button onclick="login()">Enter</button>
-<p id="err" class="sm" style="color:#e8605a"></p>
+<div class="sub">Your daily study companion</div>
+<input id="pw" type="password" placeholder="Enter password">
+<button onclick="login()">Unlock</button>
+<div id="err" class="err"></div>
 </div>
 
-<div id="setup" hidden>
-<div class="lg"></div><h1>Shuru karte hain</h1>
-<div class="sub">Apni details bharo</div>
+<div id="s1" class="scr" hidden>
+<div class="dots"><i class="on"></i><i></i><i></i></div>
+<h3>What's your name?</h3><div class="sub">We'll personalise your dashboard</div>
+<div class="card"><input id="nm" placeholder="Enter your name" maxlength="30">
+<button onclick="step1()">Continue</button><div id="e1" class="err"></div></div>
+</div>
+
+<div id="s2" class="scr" hidden>
+<div class="dots"><i></i><i class="on"></i><i></i></div>
+<h3>Which exam is coming up?</h3><div class="sub">Choose one to continue</div>
 <div class="card">
-<label>Tumhara naam</label><input id="nm" placeholder="Naam likho">
-<label>Kaunsa exam hai?</label>
-<select id="et"><option>Quarterly</option><option>Half Yearly</option><option>Annual</option></select>
+<button class="opt" onclick="pick('Quarterly')">Quarterly Exam</button>
+<button class="opt" onclick="pick('Half Yearly')">Half Yearly Exam</button>
+<button class="opt" onclick="pick('Annual')">Annual Exam</button>
+<button class="ghost" style="margin-top:10px" onclick="show('s1')">Back</button></div>
+</div>
+
+<div id="s3" class="scr" hidden>
+<div class="dots"><i></i><i></i><i class="on"></i></div>
+<h3>Set your exam dates</h3><div class="sub">Your countdown starts right after this</div>
+<div class="card">
 <label>SST exam date</label><input type="date" id="d0">
 <label>Math exam date</label><input type="date" id="d1">
 <label>Science exam date</label><input type="date" id="d2">
-<button onclick="saveP()">Save & Start 🚀</button>
-<p id="se" class="sm" style="color:#e8605a"></p>
-</div></div>
+<button onclick="step3()" style="margin-top:12px">Start Tracking</button>
+<button class="ghost" onclick="show('s2')">Back</button><div id="e3" class="err"></div></div>
+</div>
 
 <div id="app" hidden>
 <div class="lg"></div><h1>PARVTRACKING</h1>
 <div class="sub" id="hi"></div>
 
-<div class="card"><h2>⏳ Next Exam: <span id="nx"></span></h2>
-<div class="cd"><div><span id="cd_d">0</span><small>Din</small></div><div><span id="cd_h">0</span><small>Ghante</small></div><div><span id="cd_m">0</span><small>Minute</small></div><div><span id="cd_s">0</span><small>Second</small></div></div>
+<div class="card"><h2>Next Exam &middot; <span id="nx"></span></h2>
+<div class="cd"><div><span id="cd_d">00</span><small>Days</small></div><div><span id="cd_h">00</span><small>Hours</small></div><div><span id="cd_m">00</span><small>Minutes</small></div><div><span id="cd_s">00</span><small>Seconds</small></div></div>
 <div id="exl"></div></div>
 
-<div class="card"><h2>🔥 Streak & Daily Goal</h2>
-<div class="big" id="st">0</div><div class="sm">din ki streak (roz kam se kam 30 min)</div>
+<div class="card"><h2>Daily Streak</h2>
+<div class="big" id="st">0</div><div class="sm">day streak &middot; study 30 min daily to keep it</div>
 <div class="bar"><div id="gb"></div></div>
-<div class="sm" id="gt"></div><div class="sm" id="sh"></div></div>
+<div class="sm" id="gt"></div><div class="sm" id="sh" style="color:#1f86d6;font-weight:500"></div></div>
 
-<div class="card"><h2>⏱️ Study Stopwatch</h2>
+<div class="card" id="tc"><h2>Study Timer</h2>
 <select id="hs"></select>
-<div class="big" id="sw">00:00:00</div>
-<button id="sb" onclick="toggle()">▶ Padhai Shuru</button>
+<div class="big" id="sw" style="margin:8px 0;font-size:40px">00:00:00</div>
+<button id="sb" onclick="toggle()">Start Studying</button>
 <div class="sm" id="hl" style="margin-top:8px"></div></div>
 
-<div class="card"><h2>✅ Chapter Checklist</h2>
+<div class="card"><h2>Chapter Checklist</h2>
 <select id="chs" onchange="draw()"></select>
-<input id="chn" placeholder="Naya chapter ka naam">
-<button onclick="addC()">Chapter Add karo</button>
-<div class="sm" id="cp" style="margin-top:8px"></div>
+<input id="chn" placeholder="Add a new chapter">
+<button onclick="addC()">Add Chapter</button>
+<div class="sm" id="cp" style="margin-top:10px"></div>
 <div class="bar"><div id="cb"></div></div>
 <div id="chl"></div></div>
 
-<button onclick="editP()" style="background:#fff;color:#2b8ad6;border:1px solid #3a9ee8">⚙️ Naam / Exam dates badlo</button>
+<button class="ghost" onclick="editP()">Edit name &amp; exam dates</button>
 </div>
 
 <script>
-const PW="PARVJI",LOGO_URL="",GOAL=10800,MIN=1800;
+const PW="PARVJI",LOGO_URL="",GOAL=10800,MIN=1800,EXAM_HOUR=9;
 const S=["Hindi","English","Maths","Science","Social Science","Sanskrit"],EX=["SST","Math","Science"];
-let D={};try{D=JSON.parse(localStorage.getItem("pt2"))||{}}catch(e){}
+let D={};try{D=JSON.parse(localStorage.getItem("pt3"))||{}}catch(e){}
 D.h=D.h||{};D.c=D.c||{};
+let T={n:"",e:"",d:["","",""]};
 const $=id=>document.getElementById(id);
-const save=()=>localStorage.setItem("pt2",JSON.stringify(D));
+const save=()=>localStorage.setItem("pt3",JSON.stringify(D));
 const key=t=>new Date(t-t.getTimezoneOffset()*6e4).toISOString().slice(0,10);
 const tod=()=>key(new Date());
 const p2=n=>String(n).padStart(2,"0");
 const fmt=s=>p2(Math.floor(s/3600))+":"+p2(Math.floor(s%3600/60))+":"+p2(s%60);
 const hm=s=>Math.floor(s/3600)+"h "+Math.floor(s%3600/60)+"m";
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const exT=d=>new Date(`${d}T${p2(EXAM_HOUR)}:00:00`);
 const run=()=>D.sw?Math.floor((Date.now()-D.sw.t)/1000):0;
 const tt=k=>Object.values(D.h[k]||{}).reduce((a,b)=>a+b,0)+(k===tod()?run():0);
-const show=id=>["lock","setup","app"].forEach(x=>$(x).hidden=x!==id);
+const show=id=>["lock","s1","s2","s3","app"].forEach(x=>$(x).hidden=x!==id);
+const retrig=(e,c)=>{e.classList.remove(c);void e.offsetWidth;e.classList.add(c)};
 
 document.querySelectorAll(".lg").forEach(e=>e.innerHTML=LOGO_URL?`<img src="${LOGO_URL}" alt="logo">`:"P");
 
 function login(){
- if($("pw").value===PW){sessionStorage.ok=1;go()}else $("err").textContent="Galat password ❌";
+ if($("pw").value===PW){sessionStorage.ok=1;go()}
+ else{$("err").textContent="Incorrect password. Please try again.";retrig($("pw"),"shake")}
 }
-function go(){D.p?startApp():editP()}
-function editP(){
- const p=D.p||{d:["","",""],n:"",e:"Annual"};
- $("nm").value=p.n;$("et").value=p.e;[0,1,2].forEach(i=>$("d"+i).value=p.d[i]);show("setup");
+function go(){if(D.p)startApp();else{T={n:"",e:"",d:["","",""]};show("s1")}}
+function editP(){T={n:D.p.n,e:D.p.e,d:D.p.d.slice()};$("nm").value=T.n;show("s1")}
+function step1(){
+ const n=$("nm").value.trim();
+ if(!n){$("e1").textContent="Please enter your name.";retrig($("nm"),"shake");return}
+ T.n=n;
+ document.querySelectorAll(".opt").forEach(b=>b.classList.toggle("on",b.textContent.startsWith(T.e)&&T.e!==""));
+ show("s2");
 }
-function saveP(){
- const n=$("nm").value.trim(),d=[0,1,2].map(i=>$("d"+i).value);
- if(!n||d.some(x=>!x)){$("se").textContent="Naam aur teeno dates bharo";return}
- D.p={n:n,e:$("et").value,d:d};save();startApp();
+function pick(e){
+ T.e=e;[0,1,2].forEach(i=>{$("d"+i).min=tod();$("d"+i).value=T.d[i]});show("s3");
+}
+function step3(){
+ const d=[0,1,2].map(i=>$("d"+i).value);
+ if(d.some(x=>!x)){$("e3").textContent="Please select all three exam dates.";return}
+ if(d.some(x=>x<tod())){$("e3").textContent="Exam dates cannot be in the past.";return}
+ D.p={n:T.n,e:T.e,d:d};save();startApp();
 }
 function startApp(){
- show("app");
  $("hs").innerHTML=$("chs").innerHTML=S.map(s=>`<option>${s}</option>`).join("");
  if(D.sw)$("hs").value=D.sw.s;
- draw();tick();
+ [...$("app").children].forEach((e,i)=>e.style.animationDelay=i*.08+"s");
+ show("app");draw();tick();
 }
 function toggle(){
  if(D.sw){
@@ -133,36 +183,41 @@ function tg(i){const l=D.c[$("chs").value];l[i].d=!l[i].d;save();draw()}
 function rm(i){D.c[$("chs").value].splice(i,1);save();draw()}
 
 function draw(){
- $("hi").textContent=`Namaste, ${D.p.n} 👋 • ${D.p.e} Exam`;
- const now=Date.now();
+ $("hi").textContent=`Welcome back, ${D.p.n} \u2022 ${D.p.e} Exams`;
+ const base=new Date(tod()+"T00:00:00");
  $("exl").innerHTML=D.p.d.map((d,i)=>{
-  const dl=Math.ceil((new Date(d+"T00:00:00")-now)/864e5);
-  return `<div class="ex"><b>${EX[i]}</b><span>${d.split("-").reverse().join("/")} • ${dl>0?dl+" din":"ho gaya"}</span></div>`;
+  const n=Math.round((new Date(d+"T00:00:00")-base)/864e5);
+  const t=n<0?"Completed":n===0?"Today":n===1?"Tomorrow":n+" days left";
+  return `<div class="ex"><b>${EX[i]}</b><span>${d.split("-").reverse().join("/")} \u2022 ${t}</span></div>`;
  }).join("");
- $("sb").textContent=D.sw?"⏹ Stop & Save":"▶ Padhai Shuru";
+ $("sb").textContent=D.sw?"Stop & Save":"Start Studying";
  $("sb").className=D.sw?"stop":"";
  $("hs").disabled=!!D.sw;
+ $("tc").classList.toggle("run",!!D.sw);
  const h=D.h[tod()]||{};
- $("hl").textContent=Object.keys(h).map(s=>`${s}: ${hm(h[s])}`).join(" • ")||"Aaj abhi koi padhai save nahi hui";
+ $("hl").textContent=Object.keys(h).map(s=>`${s}: ${hm(h[s])}`).join(" \u2022 ")||"No study time saved today";
  const l=D.c[$("chs").value]||[],dn=l.filter(x=>x.d).length;
- $("cp").textContent=`${dn} / ${l.length} chapter complete`;
+ $("cp").textContent=`${dn} of ${l.length} chapters completed`;
  $("cb").style.width=(l.length?dn/l.length*100:0)+"%";
- $("chl").innerHTML=l.map((c,i)=>`<div class="row"><input type="checkbox" ${c.d?"checked":""} onchange="tg(${i})"><span class="${c.d?"done":""}">${esc(c.n)}</span><button class="x" onclick="rm(${i})">✕</button></div>`).join("");
+ $("chl").innerHTML=l.map((c,i)=>`<div class="row"><input type="checkbox" ${c.d?"checked":""} onchange="tg(${i})"><span class="${c.d?"done":""}">${esc(c.n)}</span><button class="x" onclick="rm(${i})">\u2715</button></div>`).join("");
 }
 
 function tick(){
  if($("app").hidden)return;
  const now=Date.now();
- const nx=D.p.d.map((d,i)=>({n:EX[i],t:new Date(d+"T00:00:00")})).filter(e=>e.t>now).sort((a,b)=>a.t-b.t)[0];
+ const nx=D.p.d.map((d,i)=>({n:EX[i],t:exT(d)})).filter(e=>e.t>now).sort((a,b)=>a.t-b.t)[0];
  if(nx){
   const r=Math.floor((nx.t-now)/1000);
   $("nx").textContent=nx.n;
-  [Math.floor(r/86400),Math.floor(r%86400/3600),Math.floor(r%3600/60),r%60].forEach((v,i)=>$("cd_"+"dhms"[i]).textContent=p2(v));
- }else{$("nx").textContent="Sab exam ho gaye 🎉";["d","h","m","s"].forEach(x=>$("cd_"+x).textContent="00")}
+  [Math.floor(r/86400),Math.floor(r%86400/3600),Math.floor(r%3600/60),r%60].forEach((v,i)=>{
+   const el=$("cd_"+"dhms"[i]),s=p2(v);
+   if(el.textContent!==s){el.textContent=s;if(i===3)retrig(el,"pop")}
+  });
+ }else{$("nx").textContent="All exams completed";["d","h","m","s"].forEach(x=>$("cd_"+x).textContent="00")}
  const t=tt(tod());
  $("gb").style.width=Math.min(100,t/GOAL*100)+"%";
- $("gt").textContent=`Aaj: ${hm(t)} / 3h goal`;
- $("sh").textContent=t>=MIN?"✅ Aaj ki streak pakki!":`Streak ke liye ${Math.ceil((MIN-t)/60)} min aur padho`;
+ $("gt").textContent=`Today: ${hm(t)} of 3h goal`;
+ $("sh").textContent=t>=GOAL?"Daily goal achieved!":t>=MIN?"Streak secured for today":`${Math.ceil((MIN-t)/60)} min more to secure today's streak`;
  let n=0,d=new Date();
  if(tt(key(d))<MIN)d.setDate(d.getDate()-1);
  while(tt(key(d))>=MIN){n++;d.setDate(d.getDate()-1)}
